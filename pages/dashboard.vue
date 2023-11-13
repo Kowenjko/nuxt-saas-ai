@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { UserButton } from 'vue-clerk'
-
 definePageMeta({
 	middleware: ['auth'],
+	layout: 'dashboard',
 })
 </script>
 
 <template>
-	<NuxtLayout class="dashboard">
-		DashBoard
-		<UserButton after-sign-out-url="/" />
-	</NuxtLayout>
+	<NuxtLayout name="dashboard"> DashBoard </NuxtLayout>
 </template>
