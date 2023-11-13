@@ -61,7 +61,7 @@ const routes = [
 				<div class="relative w-8 h-8 mr-4">
 					<NuxtImg src="/logo.png" />
 				</div>
-				<h1 class="text-2xl font-bold font-monts">Genius</h1>
+				<h1 class="text-2xl font-bold">Genius</h1>
 			</nuxt-link>
 		</div>
 
