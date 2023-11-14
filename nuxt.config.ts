@@ -18,6 +18,7 @@ export default defineNuxtConfig({
 			clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY,
 		},
 		clerkSecretKey: process.env.CLERK_SECRET_KEY,
+		openAiApiKey: process.env.OPENAI_API_KEY,
 	},
 	hooks: {
 		'components:dirs': (dirs) => {
