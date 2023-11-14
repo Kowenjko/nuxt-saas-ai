@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { Menu } from 'lucide-vue-next'
+
+interface Props {
+	apiLimitCount: number
+	isPro: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+	apiLimitCount: 0,
+	isPro: false,
+})
+
+const isMounted = ref(false)
+
+onMounted(() => (isMounted.value = true))
 </script>
 
 <template>
-	<UiSheet>
+	<UiSheet v-if="isMounted">
 		<UiSheetTrigger>
-			<UiButton variant="ghost" size="icon" class="md:hidden">
-				<Menu />
-			</UiButton>
+			<Menu class="md:hidden" />
 		</UiSheetTrigger>
 		<UiSheetContent side="left" class="p-0">
-			<Sidebar />
+			<Sidebar :apiLimitCount="apiLimitCount" :isPro="isPro" />
 		</UiSheetContent>
 	</UiSheet>
 </template>

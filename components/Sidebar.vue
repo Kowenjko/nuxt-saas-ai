@@ -10,6 +10,16 @@ import {
 	VideoIcon,
 } from 'lucide-vue-next'
 
+interface Props {
+	apiLimitCount: number
+	isPro: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+	apiLimitCount: 0,
+	isPro: false,
+})
+
 const routes = [
 	{
 		label: 'Dashboard',
@@ -63,31 +73,31 @@ const routes = [
 				</div>
 				<h1 class="text-2xl font-bold">Genius</h1>
 			</nuxt-link>
+			<div class="space-y-1">
+				<nuxt-link
+					v-for="route in routes"
+					:key="route.href"
+					:to="route.href"
+					:class="
+						cn(
+							'text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
+							$route.path === route.href
+								? 'text-white bg-white-100'
+								: 'text-zinc-400'
+						)
+					"
+				>
+					<div class="flex items-center flex-1">
+						<component
+							:is="route.icon"
+							:class="cn('h-5 w-5 mr-3', route.color)"
+						/>
+						{{ route.label }}
+					</div>
+				</nuxt-link>
+			</div>
 		</div>
-
-		<div class="space-y-1">
-			<nuxt-link
-				v-for="route in routes"
-				:key="route.href"
-				:to="route.href"
-				:class="
-					cn(
-						'text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
-						$route.path === route.href
-							? 'text-white bg-white-100'
-							: 'text-zinc-400'
-					)
-				"
-			>
-				<div class="flex items-center flex-1">
-					<component
-						:is="route.icon"
-						:class="cn('h-5 w-5 mr-3', route.color)"
-					/>
-					{{ route.label }}
-				</div>
-			</nuxt-link>
-		</div>
+		<FreeCounter :api-limit-count="apiLimitCount" :is-pro="isPro" />
 	</div>
 </template>
 

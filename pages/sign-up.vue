@@ -3,6 +3,7 @@ import { SignUp } from 'vue-clerk'
 
 definePageMeta({
 	middleware: ['public'],
+	layout: 'auth',
 })
 </script>
 
