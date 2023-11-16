@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai'
+import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai'
 
 const configuration = new Configuration({
 	apiKey: useRuntimeConfig().openAiApiKey,
@@ -6,11 +6,18 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration)
 
+const instructionMessage: ChatCompletionRequestMessage = {
+	role: 'system',
+	content:
+		'You are a code generator. You must answer only in markdown code snippets. Use code comments for explanations.',
+}
+
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event)
 	const { messages, userId } = JSON.parse(body)
 
 	try {
+		console.log('messages==>', messages)
 		console.log('userId==>', userId)
 
 		if (!userId) {
@@ -27,7 +34,7 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		if (!messages && messages.length > 0) {
+		if (!messages) {
 			throw createError({
 				statusCode: 400,
 				statusMessage: 'Messages are required',
@@ -45,17 +52,15 @@ export default defineEventHandler(async (event) => {
 		// }
 
 		const response = await openai.createChatCompletion({
-			max_tokens: 2048,
-			model: 'gpt-3.5-turbo', // or `gpt-3.5-turbo`
-			temperature: 0.5,
-			messages,
+			model: 'gpt-3.5-turbo',
+			messages: [instructionMessage, ...messages],
 		})
 
 		// if (!isPro) {
 		// 	await incrementApiLimit()
 		// }
 
-		console.log(response.data.choices[0])
+		console.log(response.data.choices[0].message)
 
 		return response.data.choices[0].message
 	} catch (error) {

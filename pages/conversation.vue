@@ -47,11 +47,9 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
 		const data = await response.json()
 		messages.value.push(data)
-		// form.values.prompt = ''
 	} catch (error) {
 		console.log(error)
 	} finally {
-		refreshNuxtData()
 		isLoading.value = false
 	}
 }

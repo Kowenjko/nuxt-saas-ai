@@ -7,8 +7,6 @@ definePageMeta({
 	middleware: ['auth'],
 	layout: 'dashboard',
 })
-
-console.log(tools)
 </script>
 
 <template>
