@@ -54,15 +54,16 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit(userId)
+		const freeTrial = await checkApiLimit(userId)
 		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
-		// 	throw createError({
-		// 		statusCode: 403,
-		// 		statusMessage: 'Free trial has expired. Please upgrade to pro.',
-		// 	})
-		// }
+		if (!freeTrial) {
+			throw createError({
+				statusCode: 403,
+				statusMessage: 'Free trial has expired. Please upgrade to pro.',
+			})
+		}
 
 		const response = await openai.createImage({
 			prompt,
@@ -71,7 +72,7 @@ export default defineEventHandler(async (event) => {
 		})
 
 		// if (!isPro) {
-		// 	await incrementApiLimit(userId)
+		await incrementApiLimit(userId)
 		// }
 		console.log(response.data.data)
 		return response.data.data

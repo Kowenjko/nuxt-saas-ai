@@ -11,6 +11,7 @@ import { amountOptions, resolutionOptions } from '@/constants/image'
 
 const { userId } = useAuth()
 const router = useRouter()
+const store = useStore()
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -38,11 +39,14 @@ const onSubmit = async (values) => {
 		})
 
 		const data = await response.json()
+		if (data.statusCode === 500) return store.onOpen()
+		console.log(data)
 		const urls = data.map((image: { url: string }) => image.url)
 
 		console.log(urls)
 
 		photos.value = urls
+		store.setApiLimitCount(await useGetLimit(userId.value))
 	} catch (error) {
 		console.log(error)
 	} finally {

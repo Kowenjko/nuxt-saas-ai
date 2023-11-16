@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 
 const { userId } = useAuth()
 const router = useRouter()
+const store = useStore()
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -34,8 +35,6 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 			content: values.prompt,
 		}
 
-		messages.value.push(userMessage)
-
 		const response = await fetch('/api/code', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -46,7 +45,10 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
 		const data = await response.json()
 		console.log(data)
+		if (data.statusCode === 500) return store.onOpen()
+		messages.value.push(userMessage)
 		messages.value.push(data)
+		store.setApiLimitCount(await useGetLimit(userId.value))
 	} catch (error) {
 		console.log(error)
 	} finally {

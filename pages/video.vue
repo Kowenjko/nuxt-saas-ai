@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 
 const { userId } = useAuth()
 const router = useRouter()
+const store = useStore()
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -39,8 +40,10 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		})
 
 		const data = await response.json()
+		if (data.statusCode === 500) return store.onOpen()
 		console.log(data)
 		video.value = data[0]
+		store.setApiLimitCount(await useGetLimit(userId.value))
 	} catch (error) {
 		console.log(error)
 	} finally {

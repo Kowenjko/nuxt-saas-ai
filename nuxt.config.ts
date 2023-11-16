@@ -1,7 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	devtools: { enabled: true },
-	modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@nuxtjs/google-fonts'],
+	modules: [
+		'@nuxtjs/tailwindcss',
+		'@nuxt/image',
+		'@nuxtjs/google-fonts',
+		'@pinia/nuxt',
+	],
+	pinia: {
+		storesDirs: ['./stores/**', './custom-folder/stores/**'],
+	},
 	head: {
 		link: [
 			{

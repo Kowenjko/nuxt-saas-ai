@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { UserButton } from 'vue-clerk'
 
-const apiLimitCount = 2
-const isPro = true
+interface Props {
+	apiLimitCount: number
+	isPro: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+	apiLimitCount: 0,
+	isPro: false,
+})
 </script>
 <template>
 	<div class="flex items-center p-4">

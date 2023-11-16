@@ -15,6 +15,8 @@ const props = withDefaults(defineProps<Props>(), {
 const isMounted = ref(false)
 const progress = computed(() => (props.apiLimitCount / MAX_FREE_COUNTS) * 100)
 
+const store = useStore()
+
 onMounted(() => (isMounted.value = true))
 </script>
 
@@ -24,9 +26,9 @@ onMounted(() => (isMounted.value = true))
 			<UiCardContent class="py-6">
 				<div class="text-center text-sm text-white mb-4 space-y-2">
 					<p>{{ apiLimitCount }} / {{ MAX_FREE_COUNTS }} Free Generations</p>
-					<UiProgress class="h-3" :model-value="progress" />
+					<UiProgress class="h-3" :model-value="progress" variant="premium" />
 				</div>
-				<UiButton variant="premium" class="w-full">
+				<UiButton @click="store.onOpen()" variant="premium" class="w-full">
 					Upgrade
 					<Zap class="w-4 h-4 ml-2 fill-white" />
 				</UiButton>

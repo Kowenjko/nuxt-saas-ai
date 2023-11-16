@@ -1,7 +1,10 @@
 import prismadb from '@/lib/prismadb'
 import { MAX_FREE_COUNTS } from '@/constants'
+// import { useAuth } from 'vue-clerk'
 
-export const incrementApiLimit = async (userId) => {
+// const { userId: id } = useAuth()
+
+export const incrementApiLimit = async (userId: string) => {
 	if (!userId) {
 		return
 	}
@@ -22,7 +25,7 @@ export const incrementApiLimit = async (userId) => {
 	}
 }
 
-export const checkApiLimit = async (userId) => {
+export const checkApiLimit = async (userId: string) => {
 	if (!userId) {
 		return false
 	}
@@ -38,7 +41,9 @@ export const checkApiLimit = async (userId) => {
 	}
 }
 
-export const getApiLimitCount = async (userId) => {
+export const getApiLimitCount = async (userId: string) => {
+	console.log(userId)
+
 	if (!userId) {
 		return 0
 	}
@@ -48,6 +53,8 @@ export const getApiLimitCount = async (userId) => {
 			userId,
 		},
 	})
+
+	console.log(userApiLimit)
 
 	if (!userApiLimit) {
 		return 0

@@ -43,15 +43,16 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit(userId)
+		const freeTrial = await checkApiLimit(userId)
 		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
-		// 	throw createError({
-		// 		status: 403,
-		// 		message: 'Free trial has expired. Please upgrade to pro.',
-		// 	})
-		// }
+		if (!freeTrial) {
+			throw createError({
+				status: 403,
+				message: 'Free trial has expired. Please upgrade to pro.',
+			})
+		}
 
 		const response = await openai.createChatCompletion({
 			model: 'gpt-3.5-turbo',
@@ -59,10 +60,8 @@ export default defineEventHandler(async (event) => {
 		})
 
 		// if (!isPro) {
-		// 	await incrementApiLimit(userId)
+		await incrementApiLimit(userId)
 		// }
-
-		console.log(response.data.choices[0].message)
 
 		return response.data.choices[0].message
 	} catch (error) {

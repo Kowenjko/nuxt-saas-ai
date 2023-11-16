@@ -28,15 +28,16 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit(userId)
+		const freeTrial = await checkApiLimit(userId)
 		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
-		// 	throw createError({
-		// 		status: 403,
-		// 		message: 'Free trial has expired. Please upgrade to pro.',
-		// 	})
-		// }
+		if (!freeTrial) {
+			throw createError({
+				status: 403,
+				message: 'Free trial has expired. Please upgrade to pro.',
+			})
+		}
 
 		const response = await replicate.run(
 			'anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351',
@@ -48,7 +49,7 @@ export default defineEventHandler(async (event) => {
 		)
 
 		// if (!isPro) {
-		// 	await incrementApiLimit(userId)
+		await incrementApiLimit(userId)
 		// }
 
 		console.log(response)

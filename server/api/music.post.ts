@@ -30,15 +30,16 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit(userId)
+		const freeTrial = await checkApiLimit(userId)
 		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
-		// 	throw createError({
-		// 		status: 403,
-		// 		message: 'Free trial has expired. Please upgrade to pro.',
-		// 	})
-		// }
+		if (!freeTrial) {
+			throw createError({
+				status: 403,
+				message: 'Free trial has expired. Please upgrade to pro.',
+			})
+		}
 
 		const response = await replicate.run(
 			'riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05',
@@ -50,7 +51,7 @@ export default defineEventHandler(async (event) => {
 		)
 
 		// if (!isPro) {
-		// 	await incrementApiLimit(userId)
+		await incrementApiLimit(userId)
 		// }
 
 		return response
