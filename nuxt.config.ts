@@ -20,6 +20,8 @@ export default defineNuxtConfig({
 		clerkSecretKey: process.env.CLERK_SECRET_KEY,
 		openAiApiKey: process.env.OPENAI_API_KEY,
 		replicateApiKey: process.env.REPLICATE_API_TOKEN,
+		databaseUrl: process.env.DATABASE_URL,
+		nodeEnv: process.env.NODE_ENV,
 	},
 	hooks: {
 		'components:dirs': (dirs) => {

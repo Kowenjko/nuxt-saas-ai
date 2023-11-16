@@ -1,4 +1,6 @@
 import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai'
+import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
+import { checkSubscription } from '@/lib/useSubscription'
 
 const configuration = new Configuration({
 	apiKey: useRuntimeConfig().openAiApiKey,
@@ -41,8 +43,8 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit()
-		// const isPro = await checkSubscription()
+		// const freeTrial = await checkApiLimit(userId)
+		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
 		// 	throw createError({
@@ -57,7 +59,7 @@ export default defineEventHandler(async (event) => {
 		})
 
 		// if (!isPro) {
-		// 	await incrementApiLimit()
+		// 	await incrementApiLimit(userId)
 		// }
 
 		console.log(response.data.choices[0].message)

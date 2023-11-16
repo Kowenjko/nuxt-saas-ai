@@ -1,4 +1,6 @@
 import Replicate from 'replicate'
+import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
+import { checkSubscription } from '@/lib/useSubscription'
 
 const replicate = new Replicate({
 	auth: useRuntimeConfig().replicateApiKey,
@@ -26,8 +28,8 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit()
-		// const isPro = await checkSubscription()
+		// const freeTrial = await checkApiLimit(userId)
+		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
 		// 	throw createError({
@@ -46,7 +48,7 @@ export default defineEventHandler(async (event) => {
 		)
 
 		// if (!isPro) {
-		// 	await incrementApiLimit()
+		// 	await incrementApiLimit(userId)
 		// }
 
 		console.log(response)

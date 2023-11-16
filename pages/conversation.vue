@@ -46,6 +46,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		})
 
 		const data = await response.json()
+		console.log(data)
 		messages.value.push(data)
 	} catch (error) {
 		console.log(error)

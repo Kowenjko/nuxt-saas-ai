@@ -1,4 +1,6 @@
 import { Configuration, OpenAIApi } from 'openai'
+import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
+import { checkSubscription } from '@/lib/useSubscription'
 
 const configuration = new Configuration({
 	apiKey: useRuntimeConfig().openAiApiKey,
@@ -15,15 +17,15 @@ export default defineEventHandler(async (event) => {
 
 		if (!userId) {
 			throw createError({
-				status: 401,
-				message: 'Unauthorized',
+				statusCode: 401,
+				messstatusMessageage: 'Unauthorized',
 			})
 		}
 
 		if (!configuration.apiKey) {
 			throw createError({
-				status: 500,
-				message: 'OpenAI API Key not configured.',
+				statusCode: 500,
+				statusMessage: 'OpenAI API Key not configured.',
 			})
 		}
 
@@ -34,15 +36,16 @@ export default defineEventHandler(async (event) => {
 			})
 		}
 
-		// const freeTrial = await checkApiLimit()
-		// const isPro = await checkSubscription()
+		const freeTrial = await checkApiLimit(userId)
+		// const isPro = await checkSubscription(userId)
 
 		// if (!freeTrial && !isPro) {
-		// 	throw createError({
-		// 		status: 403,
-		// 		message: 'Free trial has expired. Please upgrade to pro.',
-		// 	})
-		// }
+		if (!freeTrial) {
+			throw createError({
+				statusCode: 403,
+				statusMessage: 'Free trial has expired. Please upgrade to pro.',
+			})
+		}
 
 		const response = await openai.createChatCompletion({
 			max_tokens: 420,
@@ -52,15 +55,15 @@ export default defineEventHandler(async (event) => {
 		})
 
 		// if (!isPro) {
-		// 	await incrementApiLimit()
+		await incrementApiLimit(userId)
 		// }
-
+		console.log(response.data.choices[0].message)
 		return response.data.choices[0].message
 	} catch (error) {
 		console.log('[CONVERSATION_ERROR]', error)
 		throw createError({
-			status: 500,
-			message: 'Internal Error',
+			statusCode: 500,
+			statusMessage: 'Internal Error',
 		})
 	}
 })
