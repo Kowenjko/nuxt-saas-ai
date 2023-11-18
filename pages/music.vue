@@ -39,12 +39,19 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 			}),
 		})
 
+		if (response.status === 500) return console.log(response.statusText)
+		if (response.status === 400) return console.log(response.statusText)
+		if (response.status === 401) return console.log(response.statusText)
+		if (response.status === 403) return store.onOpen()
+
 		const data = await response.json()
-		if (data.statusCode === 500) return store.onOpen()
+
+		// console.log(await response.text())
+
 		music.value = data.audio
 		store.setApiLimitCount(await useGetLimit(userId.value))
 	} catch (error) {
-		console.log(error)
+		console.log('test', error)
 	} finally {
 		isLoading.value = false
 	}

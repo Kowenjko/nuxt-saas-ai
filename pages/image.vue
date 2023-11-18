@@ -38,8 +38,13 @@ const onSubmit = async (values) => {
 			}),
 		})
 
+		if (response.status === 500) return console.log(response.statusText)
+		if (response.status === 400) return console.log(response.statusText)
+		if (response.status === 401) return console.log(response.statusText)
+		if (response.status === 403) return store.onOpen()
+
 		const data = await response.json()
-		if (data.statusCode === 500) return store.onOpen()
+
 		console.log(data)
 		const urls = data.map((image: { url: string }) => image.url)
 

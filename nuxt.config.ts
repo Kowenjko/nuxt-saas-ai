@@ -6,11 +6,13 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@nuxtjs/google-fonts',
 		'@pinia/nuxt',
+		'@nuxt/content',
 	],
 	pinia: {
 		storesDirs: ['./stores/**', './custom-folder/stores/**'],
 	},
 	head: {
+		script: [{ src: 'https://js.stripe.com/v3/', defer: true }],
 		link: [
 			{
 				rel: 'stylesheet',
@@ -29,7 +31,9 @@ export default defineNuxtConfig({
 		openAiApiKey: process.env.OPENAI_API_KEY,
 		replicateApiKey: process.env.REPLICATE_API_TOKEN,
 		databaseUrl: process.env.DATABASE_URL,
-		nodeEnv: process.env.NODE_ENV,
+		stripeApiKey: process.env.STRIPE_API_KEY,
+		stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+		publicAppUrl: process.env.PUBLIC_APP_URL,
 	},
 	hooks: {
 		'components:dirs': (dirs) => {

@@ -2,12 +2,38 @@
 import { tools } from '@/constants'
 import { cn } from '@/lib/utils'
 import { Check, Zap } from 'lucide-vue-next'
+import { useAuth, useUser } from 'vue-clerk'
 
 const loading = ref(false)
 
 const store = useStore()
+const { userId } = useAuth()
+const { user } = useUser()
+const router = useRouter()
 
-const onSubscribe = () => {}
+const onSubscribe = async () => {
+	try {
+		loading.value = true
+		const response = await fetch('/api/stripe', {
+			method: 'POST',
+			body: JSON.stringify({
+				user: user.value,
+				userId: userId.value,
+			}),
+		})
+
+		if (response.status === 401) return console.log(response.statusText)
+		if (response.status === 500) return console.log(response.statusText)
+
+		const data = await response.json()
+		// console.log(data)
+		window.location.href = data.url
+	} catch (error) {
+		console.error('Something went wrong')
+	} finally {
+		loading.value = true
+	}
+}
 </script>
 
 <template>
@@ -17,7 +43,10 @@ const onSubscribe = () => {}
 				<UiDialogTitle
 					class="flex justify-center items-center flex-col gap-y-4 pb-2"
 				>
-					<UiBadge>Upgrade to Genius</UiBadge>
+					<div class="flex items-center gap-x-2 font-bold text-xl">
+						Upgrade to Genius
+						<UiBadge class="uppercase text-sm py-1">Pro</UiBadge>
+					</div>
 				</UiDialogTitle>
 				<UiDialogDescription
 					class="text-center pt-2 space-y-2 text-zinc-900 font-medium"

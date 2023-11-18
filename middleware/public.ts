@@ -1,6 +1,7 @@
 import { useClerk } from 'vue-clerk'
 
 export default defineNuxtRouteMiddleware(() => {
+	console.log('Middleware===>')
 	const nuxtApp = useNuxtApp()
 	const clerk = useClerk()
 
@@ -15,4 +16,6 @@ export default defineNuxtRouteMiddleware(() => {
 	if (process.client && clerk.loaded && clerk.user?.id) {
 		return navigateTo('/dashboard')
 	}
+
+	return navigateTo('/api/webhook')
 })

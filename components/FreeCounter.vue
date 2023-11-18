@@ -26,7 +26,7 @@ onMounted(() => (isMounted.value = true))
 			<UiCardContent class="py-6">
 				<div class="text-center text-sm text-white mb-4 space-y-2">
 					<p>{{ apiLimitCount }} / {{ MAX_FREE_COUNTS }} Free Generations</p>
-					<UiProgress class="h-3" :model-value="progress" variant="premium" />
+					<UiProgress class="h-3" :model-value="progress" />
 				</div>
 				<UiButton @click="store.onOpen()" variant="premium" class="w-full">
 					Upgrade

@@ -20,9 +20,6 @@ const formSchema = toTypedSchema(
 	})
 )
 
-const test = 'Test'
-const mdcVars = ref({ name: 'Maxime' })
-
 const isLoading = ref(false)
 const messages = ref([])
 
@@ -42,11 +39,15 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 				userId: userId.value,
 			}),
 		})
+		if (response.status === 500) return console.log(response.statusText)
+		if (response.status === 400) return console.log(response.statusText)
+		if (response.status === 401) return console.log(response.statusText)
+		if (response.status === 403) return store.onOpen()
 
 		const data = await response.json()
-		console.log(data)
-		if (data.statusCode === 500) return store.onOpen()
+
 		messages.value.push(userMessage)
+
 		messages.value.push(data)
 		store.setApiLimitCount(await useGetLimit(userId.value))
 	} catch (error) {

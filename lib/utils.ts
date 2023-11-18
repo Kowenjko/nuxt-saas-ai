@@ -3,5 +3,9 @@ import { twMerge } from 'tailwind-merge'
 import { camelize, getCurrentInstance, toHandlerKey } from 'vue'
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+	return twMerge(clsx(inputs))
+}
+
+export function absoluteUrl(path: string) {
+	return `${useRuntimeConfig().publicAppUrl}${path}`
 }

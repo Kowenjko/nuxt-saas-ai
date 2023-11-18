@@ -44,9 +44,15 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 			}),
 		})
 
+		if (response.status === 500) return console.log(response.statusText)
+		if (response.status === 400) return console.log(response.statusText)
+		if (response.status === 401) return console.log(response.statusText)
+		if (response.status === 403) return store.onOpen()
+
+		console.log('text======>', await response.text())
+
 		const data = await response.json()
 
-		if (data.statusCode === 500) return store.onOpen()
 		messages.value.push(userMessage)
 		console.log(data)
 		messages.value.push(data)
