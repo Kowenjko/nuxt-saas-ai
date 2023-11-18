@@ -17,5 +17,5 @@ export default defineNuxtRouteMiddleware(() => {
 		return navigateTo('/dashboard')
 	}
 
-	return navigateTo('/api/webhook')
+	// return navigateTo('/')
 })

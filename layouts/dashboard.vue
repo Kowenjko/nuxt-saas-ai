@@ -6,7 +6,7 @@ const store = useStore()
 
 const isPro = false
 
-// onMounted(async () => store.setApiLimitCount(await useGetLimit(userId.value)))
+onMounted(async () => store.setApiLimitCount(await useGetLimit(userId.value)))
 watch(userId, async (id) => store.setApiLimitCount(await useGetLimit(id)))
 </script>
 <template>
