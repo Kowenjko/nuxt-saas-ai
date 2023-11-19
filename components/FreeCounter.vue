@@ -12,12 +12,9 @@ const props = withDefaults(defineProps<Props>(), {
 	isPro: false,
 })
 
-const isMounted = ref(false)
 const progress = computed(() => (props.apiLimitCount / MAX_FREE_COUNTS) * 100)
 
 const store = useStore()
-
-onMounted(() => (isMounted.value = true))
 </script>
 
 <template>

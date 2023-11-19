@@ -10,14 +10,10 @@ withDefaults(defineProps<Props>(), {
 	apiLimitCount: 0,
 	isPro: false,
 })
-
-const isMounted = ref(false)
-
-onMounted(() => (isMounted.value = true))
 </script>
 
 <template>
-	<UiSheet v-if="isMounted">
+	<UiSheet>
 		<UiSheetTrigger>
 			<Menu class="md:hidden" />
 		</UiSheetTrigger>

@@ -2,32 +2,21 @@ import Stripe from 'stripe'
 import prismadb from '@/lib/prismadb'
 import { stripe } from '@/lib/stripe'
 
+const webhookSecret = useRuntimeConfig().stripeWebhookSecret!
+
 export default defineEventHandler(async (e) => {
-	console.log('Вход===>')
-	const body = await readBody(e)
+	console.log('Webhook===>')
+	const body = await readRawBody(e)
 	const signature = getHeader(e, 'Stripe-Signature') as string
-	// const signature = e.node.req.headers['stripe-signature']
-	console.log('signature===>', signature)
-	let event: Stripe.Event
 
-	try {
-		event = stripe.webhooks.constructEvent(
-			body,
-			signature,
-			useRuntimeConfig().stripeWebhookSecret!
-		)
+	let stripeEvent: Stripe.Event
 
-		console.log(event)
-	} catch (error: any) {
-		throw createError({
-			statusCode: 400,
-			message: `Webhook Error: ${error.message}`,
-		})
-	}
+	stripeEvent = stripe.webhooks.constructEvent(body, signature, webhookSecret)
 
-	const session = event.data.object as Stripe.Checkout.Session
+	if (!stripeEvent) errorHandler(400, 'Webhook Error')
+	const session = stripeEvent.data.object as Stripe.Checkout.Session
 
-	if (event.type === 'checkout.session.completed') {
+	if (stripeEvent.type === 'checkout.session.completed') {
 		const subscription = await stripe.subscriptions.retrieve(
 			session.subscription as string
 		)
@@ -52,7 +41,7 @@ export default defineEventHandler(async (e) => {
 		})
 	}
 
-	if (event.type === 'invoice.payment_succeeded') {
+	if (stripeEvent.type === 'invoice.payment_succeeded') {
 		const subscription = await stripe.subscriptions.retrieve(
 			session.subscription as string
 		)
@@ -70,5 +59,5 @@ export default defineEventHandler(async (e) => {
 		})
 	}
 
-	return { status: 200 }
+	return 200
 })

@@ -12,7 +12,6 @@ const video = ref<string | null>(null)
 const form = reactive<FormI>({ prompt: '' })
 
 const store = useStore()
-store.setApiLimitCount(await useGetLimit())
 
 const onSubmit = async () => {
 	isLoading.value = true
@@ -56,18 +55,13 @@ definePageMeta({
 			@submit="onSubmit"
 			class="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
 		>
-			<FormField name="prompt">
-				<UiFormItem class="col-span-12 lg:col-span-10">
-					<UiFormControl class="m-0 p-0">
-						<UiInput
-							class="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-							v-model="form.prompt"
-							:disabled="isLoading"
-							placeholder="An astronaut riding a horse"
-						/>
-					</UiFormControl>
-				</UiFormItem>
-			</FormField>
+			<TextField
+				name="prompt"
+				v-model:prompt="form.prompt"
+				placeholder="An astronaut riding a horse"
+				:isLoading="isLoading"
+			/>
+
 			<UiButton
 				class="col-span-12 lg:col-span-2 w-full"
 				type="submit"

@@ -5,8 +5,6 @@ import { ArrowRight } from 'lucide-vue-next'
 
 const store = useStore()
 
-store.setApiLimitCount(await useGetLimit())
-
 definePageMeta({
 	middleware: ['auth'],
 	layout: 'dashboard',

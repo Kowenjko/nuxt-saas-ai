@@ -12,7 +12,6 @@ interface MessageI {
 }
 
 const store = useStore()
-store.setApiLimitCount(await useGetLimit())
 
 const isLoading = ref<boolean>(false)
 const messages = ref<MessageI[]>([])
@@ -64,22 +63,17 @@ definePageMeta({
 		bgColor="bg-violet-500/10"
 	/>
 	<div class="px-4 lg:px-8">
-		<form
-			@submit.prevent="onSubmit"
+		<Form
+			@submit="onSubmit"
 			class="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
 		>
-			<FormField name="prompt">
-				<UiFormItem class="col-span-12 lg:col-span-10">
-					<UiFormControl class="m-0 p-0">
-						<UiInput
-							class="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-							placeholder="How do I calculate the radius of a circle?"
-							v-model="form.prompt"
-							:disabled="isLoading"
-						/>
-					</UiFormControl>
-				</UiFormItem>
-			</FormField>
+			<TextField
+				name="prompt"
+				v-model:prompt="form.prompt"
+				placeholder="How do I calculate the radius of a circle?"
+				:isLoading="isLoading"
+			/>
+
 			<UiButton
 				class="col-span-12 lg:col-span-2 w-full"
 				type="submit"
@@ -88,7 +82,7 @@ definePageMeta({
 			>
 				Generate
 			</UiButton>
-		</form>
+		</Form>
 	</div>
 	<div class="space-y-4 mt-4">
 		<div

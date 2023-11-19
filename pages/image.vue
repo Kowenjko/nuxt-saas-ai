@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ImageIcon } from 'lucide-vue-next'
 import { Form } from 'vee-validate'
-import { FormField } from '@/components/ui/form'
 
 import { amountOptions, resolutionOptions } from '@/constants/image'
 
@@ -12,7 +11,6 @@ interface FormI {
 }
 
 const store = useStore()
-store.setApiLimitCount(await useGetLimit())
 
 const isLoading = ref<boolean>(false)
 const photos = ref<string[]>([])
@@ -61,59 +59,26 @@ definePageMeta({
 			class="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
 			@submit="onSubmit"
 		>
-			<FormField name="prompt">
-				<UiFormItem class="col-span-12 lg:col-span-6">
-					<UiFormControl class="m-0 p-0">
-						<UiInput
-							class="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-							v-model="form.prompt"
-							:disabled="isLoading"
-							placeholder="A picture of a horse in Swiss alps"
-						/>
-					</UiFormControl>
-				</UiFormItem>
-			</FormField>
-			<FormField name="amount">
-				<UiFormItem class="col-span-12 lg:col-span-2">
-					<UiSelect :disabled="isLoading" v-model="form.amount">
-						<UiFormControl>
-							<UiSelectTrigger>
-								<UiSelectValue />
-							</UiSelectTrigger>
-						</UiFormControl>
-						<UiSelectContent>
-							<UiSelectItem
-								v-for="option in amountOptions"
-								:key="option.value"
-								:value="option.value"
-							>
-								{{ option.label }}
-							</UiSelectItem>
-						</UiSelectContent>
-					</UiSelect>
-				</UiFormItem>
-			</FormField>
+			<TextField
+				name="prompt"
+				v-model:prompt="form.prompt"
+				placeholder="A picture of a horse in Swiss alps"
+				:isLoading="isLoading"
+				col-span="6"
+			/>
 
-			<FormField name="resolution">
-				<UiFormItem class="col-span-12 lg:col-span-2">
-					<UiSelect v-model="form.resolution" :disabled="isLoading">
-						<UiFormControl>
-							<UiSelectTrigger>
-								<UiSelectValue />
-							</UiSelectTrigger>
-						</UiFormControl>
-						<UiSelectContent>
-							<UiSelectItem
-								v-for="option in resolutionOptions"
-								:key="option.value"
-								:value="option.value"
-							>
-								{{ option.label }}
-							</UiSelectItem>
-						</UiSelectContent>
-					</UiSelect>
-				</UiFormItem>
-			</FormField>
+			<SelectField
+				name="amount"
+				v-model:selected="form.amount"
+				:isLoading="isLoading"
+				:options="amountOptions"
+			/>
+			<SelectField
+				name="resolution"
+				v-model:selected="form.resolution"
+				:isLoading="isLoading"
+				:options="resolutionOptions"
+			/>
 
 			<UiButton
 				class="col-span-12 lg:col-span-2 w-full"

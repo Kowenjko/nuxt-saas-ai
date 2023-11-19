@@ -2,7 +2,6 @@
 import { Settings } from 'lucide-vue-next'
 
 const store = useStore()
-store.setApiLimitCount(await useGetLimit())
 
 definePageMeta({
 	layout: 'dashboard',

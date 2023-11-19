@@ -2,37 +2,32 @@
 import { tools } from '@/constants'
 import { cn } from '@/lib/utils'
 import { Check, Zap } from 'lucide-vue-next'
-import { useAuth, useUser } from 'vue-clerk'
+import { useUser } from 'vue-clerk'
 
-const loading = ref(false)
+const isLoading = ref(false)
 
 const store = useStore()
-const { userId } = useAuth()
+
 const { user } = useUser()
-const router = useRouter()
 
-const onSubscribe = async () => {
-	try {
-		loading.value = true
-		const response = await fetch('/api/stripe', {
-			method: 'POST',
-			body: JSON.stringify({
-				user: user.value,
-				userId: userId.value,
-			}),
-		})
+const manageSubscription = async () => {
+	isLoading.value = true
 
-		if (response.status === 401) return console.log(response.statusText)
-		if (response.status === 500) return console.log(response.statusText)
+	const { data, error } = await useFetch('/api/stripe', {
+		method: 'POST',
+		body: {
+			user: user.value,
+		},
+	})
 
-		const data = await response.json()
-		// console.log(data)
-		window.location.href = data.url
-	} catch (error) {
-		console.error('Something went wrong')
-	} finally {
-		loading.value = true
+	if (error.value) {
+		console.log(error.value.statusMessage)
 	}
+
+	if (data.value) {
+		window.location.href = data.value.url
+	}
+	isLoading.value = false
 }
 </script>
 
@@ -70,8 +65,8 @@ const onSubscribe = async () => {
 			</UiDialogHeader>
 			<UiDialogFooter>
 				<UiButton
-					:disabled="loading"
-					:onClick="onSubscribe"
+					:disabled="isLoading"
+					:onClick="manageSubscription"
 					size="lg"
 					variant="premium"
 					class="w-full"
