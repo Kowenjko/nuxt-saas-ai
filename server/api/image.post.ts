@@ -1,67 +1,26 @@
-import { Configuration, OpenAIApi } from 'openai'
 import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
-import { checkSubscription } from '@/lib/useSubscription'
+// import { checkSubscription } from '@/lib/useSubscription'
 
-const configuration = new Configuration({
-	apiKey: useRuntimeConfig().openAiApiKey,
-})
-
-const openai = new OpenAIApi(configuration)
+const { configuration, openai } = useOpenAI()
 
 export default defineEventHandler(async (event) => {
-	const body = await readBody(event)
-	const { values, userId } = JSON.parse(body)
-
-	console.log('values==>', values)
-
-	const { prompt, amount = 1, resolution = '512x512' } = values
+	const { form } = await readBody(event)
+	const { userId } = event.context.auth
+	const { prompt, amount = 1, resolution = '512x512' } = form
 
 	console.log('userId==>', userId)
+	console.log('values==>', form)
 
-	if (!userId) {
-		throw createError({
-			statusCode: 401,
-			statusMessage: 'Unauthorized',
-		})
-	}
-
-	if (!configuration.apiKey) {
-		throw createError({
-			statusCode: 500,
-			statusMessage: 'OpenAI API Key not configured.',
-		})
-	}
-
-	if (!prompt) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Prompt is required',
-		})
-	}
-
-	if (!amount) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Amount is required',
-		})
-	}
-
-	if (!resolution) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Resolution is required',
-		})
-	}
+	if (!userId) errorHandler(401, 'Unauthorized')
+	if (!configuration.apiKey) errorHandler(500, 'OpenAI API Key not configured.')
+	if (!prompt) errorHandler(400, 'Prompt are required')
 
 	const freeTrial = await checkApiLimit(userId)
-	const isPro = await checkSubscription(userId)
+	// const isPro = await checkSubscription(userId)
 
-	if (!freeTrial && !isPro) {
-		throw createError({
-			statusCode: 403,
-			statusMessage: 'Free trial has expired. Please upgrade to pro.',
-		})
-	}
+	// if (!freeTrial && !isPro)
+	if (!freeTrial)
+		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
 	const response = await openai.createImage({
 		prompt,
@@ -69,16 +28,12 @@ export default defineEventHandler(async (event) => {
 		size: resolution,
 	})
 
-	if (response) {
-		if (!isPro) {
-			await incrementApiLimit(userId)
-		}
-		// console.log(response.data.data)
+	if (response?.data) {
+		// if (!isPro)
+		await incrementApiLimit(userId)
+
 		return response.data.data
 	}
 
-	throw createError({
-		statusCode: 500,
-		statusMessage: 'Internal Error',
-	})
+	errorHandler(500, 'Internal Error')
 })

@@ -12,7 +12,6 @@ export default defineNuxtConfig({
 		storesDirs: ['./stores/**', './custom-folder/stores/**'],
 	},
 	head: {
-		script: [{ src: 'https://js.stripe.com/v3/', defer: true }],
 		link: [
 			{
 				rel: 'stylesheet',

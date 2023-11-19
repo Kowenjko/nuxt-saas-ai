@@ -7,6 +7,8 @@ useHead({
 
 <template>
 	<suspense>
-		<NuxtPage />
+		<NuxtLayout>
+			<NuxtPage />
+		</NuxtLayout>
 	</suspense>
 </template>

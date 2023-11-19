@@ -1,5 +1,4 @@
-export const useGetLimit = async (id: string) => {
-	const response = await fetch(`/api/limit-count/${id}`)
-	const data = await response.json()
-	return data?.count || 0
+export const useGetLimit = async () => {
+	const { data } = await useFetch('/api/limit-count')
+	return data.value?.apiLimitCount || 0
 }

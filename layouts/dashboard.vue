@@ -6,8 +6,10 @@ const store = useStore()
 
 const isPro = false
 
-onMounted(async () => store.setApiLimitCount(await useGetLimit(userId.value)))
-watch(userId, async (id) => store.setApiLimitCount(await useGetLimit(id)))
+onMounted(async () => {
+	store.setApiLimitCount(await useGetLimit())
+})
+watch(userId, async () => store.setApiLimitCount(await useGetLimit()))
 </script>
 <template>
 	<div class="h-full relative">
@@ -16,6 +18,7 @@ watch(userId, async (id) => store.setApiLimitCount(await useGetLimit(id)))
 		>
 			<Sidebar :isPro="isPro" :apiLimitCount="store.apiLimitCount" />
 		</div>
+
 		<main class="md:pl-72 pb-10">
 			<Navbar :isPro="isPro" :apiLimitCount="store.apiLimitCount" />
 			<ProModal />

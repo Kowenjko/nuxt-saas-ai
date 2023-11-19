@@ -5,8 +5,9 @@ import { stripe } from '@/lib/stripe'
 export default defineEventHandler(async (e) => {
 	console.log('Вход===>')
 	const body = await readBody(e)
-	const signature = e.node.req.headers['stripe-signature']
-
+	const signature = getHeader(e, 'Stripe-Signature') as string
+	// const signature = e.node.req.headers['stripe-signature']
+	console.log('signature===>', signature)
 	let event: Stripe.Event
 
 	try {

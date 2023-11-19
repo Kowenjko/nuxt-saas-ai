@@ -1,64 +1,35 @@
-import Replicate from 'replicate'
 import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
 import { checkSubscription } from '@/lib/useSubscription'
 
-const replicate = new Replicate({
-	auth: useRuntimeConfig().replicateApiKey,
-})
+const { replicate, musicRiffusion } = useReplicate()
 
 export default defineEventHandler(async (event) => {
-	const body = await readBody(event)
-	const { prompt, userId } = JSON.parse(body)
-
-	console.log('body===', body)
+	const { prompt } = await readBody(event)
+	const { userId } = event.context.auth
 
 	console.log('prompt==>', prompt)
 	console.log('userId==>', userId)
 
-	if (!userId) {
-		throw createError({
-			statusCode: 401,
-			statusMessage: 'Unauthorized',
-		})
-	}
-
-	if (!prompt) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Prompt is required',
-		})
-	}
+	if (!userId) errorHandler(401, 'Unauthorized')
+	if (!replicate.auth) errorHandler(500, 'OpenAI API Key not configured.')
+	if (!prompt) errorHandler(400, 'Prompt are required')
 
 	const freeTrial = await checkApiLimit(userId)
-	const isPro = await checkSubscription(userId)
+	// const isPro = await checkSubscription(userId)
 
-	if (!freeTrial && !isPro) {
-		// if (!freeTrial) {
-		throw createError({
-			status: 403,
-			message: 'Free trial has expired. Please upgrade to pro.',
-		})
-	}
+	// if (!freeTrial && !isPro)
+	if (!freeTrial)
+		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
-	const response = await replicate.run(
-		'riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05',
-		{
-			input: {
-				prompt_a: prompt,
-			},
-		}
-	)
+	const response = await replicate.run(musicRiffusion, {
+		input: { prompt_a: prompt },
+	})
 
 	if (response) {
-		if (!isPro) {
-			await incrementApiLimit(userId)
-		}
+		// if (!isPro)
+		await incrementApiLimit(userId)
 
 		return response
-	} else {
-		throw createError({
-			statusCode: 500,
-			statusMessage: 'Internal Error',
-		})
 	}
+	errorHandler(500, 'Internal Error')
 })

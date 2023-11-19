@@ -8,11 +8,5 @@ definePageMeta({
 </script>
 
 <template>
-	<NuxtLayout name="auth">
-		<SignUp
-			path="/sign-up"
-			afterSignUpUrl="/dashboard"
-			sign-in-url="/sign-in"
-		/>
-	</NuxtLayout>
+	<SignUp path="/sign-up" afterSignUpUrl="/dashboard" sign-in-url="/sign-in" />
 </template>

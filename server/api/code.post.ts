@@ -1,71 +1,38 @@
-import { Configuration, ChatCompletionRequestMessage, OpenAIApi } from 'openai'
 import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
-import { checkSubscription } from '@/lib/useSubscription'
+// import { checkSubscription } from '@/lib/useSubscription'
 
-const configuration = new Configuration({
-	apiKey: useRuntimeConfig().openAiApiKey,
-})
-
-const openai = new OpenAIApi(configuration)
-
-const instructionMessage: ChatCompletionRequestMessage = {
-	role: 'system',
-	content:
-		'You are a code generator. You must answer only in markdown code snippets. Use code comments for explanations.',
-}
+const { configuration, openai, instructionMessage } = useOpenAI()
 
 export default defineEventHandler(async (event) => {
-	const body = await readBody(event)
-	const { messages, userId } = JSON.parse(body)
+	const { messages } = await readBody(event)
+	const { userId } = event.context.auth
 
-	console.log('messages==>', messages)
 	console.log('userId==>', userId)
+	console.log('messages==>', messages)
 
-	if (!userId) {
-		throw createError({
-			status: 401,
-			message: 'Unauthorized',
-		})
-	}
+	if (!userId) errorHandler(401, 'Unauthorized')
+	if (!configuration.apiKey) errorHandler(500, 'OpenAI API Key not configured.')
 
-	if (!configuration.apiKey) {
-		throw createError({
-			status: 500,
-			message: 'OpenAI API Key not configured.',
-		})
-	}
-
-	if (!messages) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Messages are required',
-		})
-	}
+	if (!messages && messages.length > 0)
+		errorHandler(400, 'Messages are required')
 
 	const freeTrial = await checkApiLimit(userId)
-	const isPro = await checkSubscription(userId)
+	// const isPro = await checkSubscription(userId)
 
-	if (!freeTrial && !isPro) {
-		throw createError({
-			status: 403,
-			message: 'Free trial has expired. Please upgrade to pro.',
-		})
-	}
+	// if (!freeTrial && !isPro)
+	if (!freeTrial)
+		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
 	const response = await openai.createChatCompletion({
 		model: 'gpt-3.5-turbo',
 		messages: [instructionMessage, ...messages],
 	})
 
-	if (response) {
-		if (!isPro) {
-			await incrementApiLimit(userId)
-		}
+	if (response?.data) {
+		// if (!isPro)
+		await incrementApiLimit(userId)
 
 		return response.data.choices[0].message
 	}
-	throw createError({
-		status: 500,
-		message: 'Internal Error',
-	})
+	errorHandler(500, 'Internal Error')
 })

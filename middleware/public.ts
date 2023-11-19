@@ -1,9 +1,9 @@
 import { useClerk } from 'vue-clerk'
 
 export default defineNuxtRouteMiddleware(() => {
-	console.log('Middleware===>')
 	const nuxtApp = useNuxtApp()
 	const clerk = useClerk()
+	console.log('Middleware===>')
 
 	// On server, check if the user is authenticated
 	// and redirect to /profile.

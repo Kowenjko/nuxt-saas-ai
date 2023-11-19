@@ -21,7 +21,7 @@ onMounted(() => (isMounted.value = true))
 </script>
 
 <template>
-	<div v-if="isMounted" class="px-3">
+	<div class="px-3">
 		<UiCard class="bg-white/10 border-0">
 			<UiCardContent class="py-6">
 				<div class="text-center text-sm text-white mb-4 space-y-2">

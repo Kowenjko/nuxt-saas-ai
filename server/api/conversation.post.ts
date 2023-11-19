@@ -1,53 +1,28 @@
-import { Configuration, OpenAIApi } from 'openai'
 import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
-import { checkSubscription } from '@/lib/useSubscription'
+// import { checkSubscription } from '@/lib/useSubscription'
 
-const configuration = new Configuration({
-	apiKey: useRuntimeConfig().openAiApiKey,
-})
-
-const openai = new OpenAIApi(configuration)
+const { configuration, openai } = useOpenAI()
 
 export default defineEventHandler(async (event) => {
-	const body = await readBody(event)
-	const { messages, userId } = JSON.parse(body)
+	const { messages } = await readBody(event)
+	const { userId } = event.context.auth
 
 	console.log('userId==>', userId)
+	console.log('messages==>', messages)
 
-	if (!userId) {
-		throw createError({
-			statusCode: 401,
-			statusMessage: 'Unauthorized',
-		})
-	}
+	if (!userId) errorHandler(401, 'Unauthorized')
+	if (!configuration.apiKey) errorHandler(500, 'OpenAI API Key not configured.')
 
-	if (!configuration.apiKey) {
-		throw createError({
-			statusCode: 500,
-			statusMessage: 'OpenAI API Key not configured.',
-		})
-	}
-
-	if (!messages && messages.length > 0) {
-		throw createError({
-			statusCode: 400,
-			statusMessage: 'Messages are required',
-		})
-	}
+	if (!messages && messages.length > 0)
+		errorHandler(400, 'Messages are required')
 
 	const freeTrial = await checkApiLimit(userId)
 
 	// const isPro = await checkSubscription(userId)
 
-	// console.log(isPro)
-
-	// if (!freeTrial && !isPro) {
-	if (!freeTrial) {
-		throw createError({
-			statusCode: 403,
-			statusMessage: 'Free trial has expired. Please upgrade to pro.',
-		})
-	}
+	// if (!freeTrial && !isPro)
+	if (!freeTrial)
+		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
 	const response = await openai.createChatCompletion({
 		max_tokens: 420,
@@ -56,18 +31,12 @@ export default defineEventHandler(async (event) => {
 		messages,
 	})
 
-	// console.log(response)
-
-	if (response) {
-		// if (!isPro) {
+	if (response?.data) {
+		// if (!isPro)
 		await incrementApiLimit(userId)
-		// }
-		// console.log(response.data.choices[0].message)
+
 		return response.data.choices[0].message
-	} else {
-		throw createError({
-			statusCode: 500,
-			statusMessage: 'Internal Error',
-		})
 	}
+
+	errorHandler(500, 'Internal Error')
 })

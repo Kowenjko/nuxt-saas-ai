@@ -3,7 +3,7 @@ import { useUser } from 'vue-clerk'
 
 const { isSignedIn } = useUser()
 
-const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-up'))
+const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-in'))
 </script>
 
 <template>
