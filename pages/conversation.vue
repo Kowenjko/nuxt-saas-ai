@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { MessageSquare } from 'lucide-vue-next'
 import { Form } from 'vee-validate'
-import { FormField } from '@/components/ui/form'
 
 interface FormI {
 	prompt: string
@@ -85,33 +84,14 @@ definePageMeta({
 		</Form>
 	</div>
 	<div class="space-y-4 mt-4">
-		<div
-			v-if="isLoading"
-			class="p-8 rounded-lg w-full flex items-center justify-center bg-muted"
-		>
-			<Loader />
-		</div>
+		<Loader v-if="isLoading" />
 		<Empty
 			v-if="messages.length === 0 && !isLoading"
 			label="No conversation started."
 		/>
-		<div class="flex flex-col-reverse gap-y-4">
-			<div
-				v-for="message in messages"
-				:key="message.content"
-				:class="[
-					'p-8 w-full flex items-start gap-x-8 rounded-lg',
-					message.role === 'user'
-						? 'bg-white border border-black/10'
-						: 'bg-muted',
-				]"
-			>
-				<UserAvatar v-if="message.role === 'user'" />
-				<BotAvatar v-else />
-
-				<p class="text-sm">{{ message.content }}</p>
-			</div>
-		</div>
+		<AnswerWrapper :messages="messages" v-slot="{ content }">
+			<p class="text-sm">{{ content }}</p>
+		</AnswerWrapper>
 	</div>
 </template>
 

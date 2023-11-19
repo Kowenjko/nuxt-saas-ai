@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { FileAudio } from 'lucide-vue-next'
 import { Form } from 'vee-validate'
-import { FormField } from '@/components/ui/form'
 
 interface FormI {
 	prompt: string
@@ -73,12 +72,7 @@ definePageMeta({
 		</Form>
 	</div>
 	<div class="space-y-4 mt-4">
-		<div
-			v-if="isLoading"
-			class="p-8 rounded-lg w-full flex items-center justify-center bg-muted"
-		>
-			<Loader />
-		</div>
+		<Loader v-if="isLoading" />
 		<Empty v-if="!video && !isLoading" label="No video files generated." />
 		<video
 			v-if="video"

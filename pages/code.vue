@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Code } from 'lucide-vue-next'
 import { Form } from 'vee-validate'
-import { FormField } from '@/components/ui/form'
 
 interface FormI {
 	prompt: string
@@ -86,38 +85,18 @@ definePageMeta({
 	</div>
 
 	<div class="space-y-4 mt-4">
-		<div
-			v-if="isLoading"
-			class="p-8 rounded-lg w-full flex items-center justify-center bg-muted"
-		>
-			<Loader />
-		</div>
+		<Loader v-if="isLoading" />
 		<Empty
 			v-if="messages.length === 0 && !isLoading"
 			label="No code started."
 		/>
-		<div class="flex flex-col-reverse gap-y-4">
-			<div
-				v-for="message in messages"
-				:key="message.content"
-				:class="[
-					'p-8 w-full flex items-start gap-x-8 rounded-lg',
-					message.role === 'user'
-						? 'bg-white border border-black/10'
-						: 'bg-muted',
-				]"
-			>
-				<UserAvatar v-if="message.role === 'user'" />
-				<BotAvatar v-else />
 
-				<div
-					v-if="message.content"
-					class="prose-pre:overflow-auto prose-pre:w-full prose-pre:my-2 prose-pre:bg-black/10 prose-pre:p-2 prose-pre:rounded-lg prose-code:bg-black/10 prose-code:rounded-lg prose-code:p-1 text-sm overflow-hidden leading-7"
-					v-html="$mdRenderer.render(message.content)"
-				/>
-			</div>
-		</div>
+		<AnswerWrapper :messages="messages" v-slot="{ content }">
+			<div
+				v-if="content"
+				class="prose-pre:overflow-auto prose-pre:w-full prose-pre:my-2 prose-pre:bg-black/10 prose-pre:p-2 prose-pre:rounded-lg prose-code:bg-black/10 prose-code:rounded-lg prose-code:p-1 text-sm overflow-hidden leading-7"
+				v-html="$mdRenderer.render(content)"
+			/>
+		</AnswerWrapper>
 	</div>
 </template>
-
-<style scoped></style>

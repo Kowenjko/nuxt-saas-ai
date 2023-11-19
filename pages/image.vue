@@ -91,12 +91,7 @@ definePageMeta({
 		</Form>
 	</div>
 	<div class="space-y-4 mt-4">
-		<div
-			v-if="isLoading"
-			class="p-8 rounded-lg w-full flex items-center justify-center bg-muted"
-		>
-			<Loader />
-		</div>
+		<Loader v-if="isLoading" />
 		<Empty
 			v-if="photos.length === 0 && !isLoading"
 			label="No images generated."
