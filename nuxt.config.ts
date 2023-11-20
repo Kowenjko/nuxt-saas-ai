@@ -33,6 +33,7 @@ export default defineNuxtConfig({
 		stripeApiKey: process.env.STRIPE_API_KEY,
 		stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
 		publicAppUrl: process.env.PUBLIC_APP_URL,
+		crispWebsiteId: process.env.CRISP_WEBSITE_ID,
 	},
 	hooks: {
 		'components:dirs': (dirs) => {
