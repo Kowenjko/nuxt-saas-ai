@@ -27,14 +27,13 @@ const onSubmit = async () => {
 
 	if (error.value) {
 		$toast.error(error.value.statusMessage as string)
-		if (error.value.statusCode === 403) {
-			store.onOpen()
-		}
+		if (error.value.statusCode === 403) store.onOpen()
 	}
 
 	if (data.value) {
 		const urls = data.value.map((image: { url: string }) => image.url)
 		store.setApiLimitCount(await useGetLimit())
+		store.setIsPro(await useGetStatus())
 		console.log(urls)
 
 		photos.value = urls

@@ -35,14 +35,13 @@ const onSubmit = async () => {
 
 	if (error.value) {
 		$toast.error(error.value.statusMessage as string)
-		if (error.value.statusCode === 403) {
-			store.onOpen()
-		}
+		if (error.value.statusCode === 403) store.onOpen()
 	}
 
 	if (data.value) {
 		messages.value = [...newMessages, data.value]
 		store.setApiLimitCount(await useGetLimit())
+		store.setIsPro(await useGetStatus())
 	}
 	isLoading.value = false
 	form.prompt = ''

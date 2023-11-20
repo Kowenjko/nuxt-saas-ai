@@ -5,21 +5,27 @@ import { MAX_FREE_COUNTS } from '@/constants'
 import { Zap } from 'lucide-vue-next'
 
 const isMounted = ref(false)
+
 const store = useStore()
 const { userId } = useAuth()
 
 const progress = computed(() => (store.apiLimitCount / MAX_FREE_COUNTS) * 100)
 
 onMounted(async () => {
-	if (userId.value) store.setApiLimitCount(await useGetLimit())
+	store.setApiLimitCount(await useGetLimit())
+	store.setIsPro(await useGetStatus())
+
 	isMounted.value = true
 })
 
-watch(userId, async () => store.setApiLimitCount(await useGetLimit()))
+watch(userId, async () => {
+	store.setApiLimitCount(await useGetLimit())
+	store.setIsPro(await useGetStatus())
+})
 </script>
 
 <template>
-	<div v-if="isMounted" class="px-3">
+	<div v-if="isMounted && !store.isPro" class="px-3">
 		<UiCard class="bg-white/10 border-0">
 			<UiCardContent class="py-6">
 				<div class="text-center text-sm text-white mb-4 space-y-2">

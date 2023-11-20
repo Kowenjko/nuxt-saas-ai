@@ -6,14 +6,14 @@ export const useStore = defineStore('store', () => {
 	const isOpen = ref(false)
 
 	const setApiLimitCount = (count: number) => (apiLimitCount.value = count)
-	const seIsPro = (status: boolean) => (isOpen.value = status)
+	const setIsPro = (status: boolean) => (isPro.value = status)
 
 	const onOpen = () => (isOpen.value = true)
 	const onClose = () => (isOpen.value = false)
 
 	return {
 		isPro,
-		seIsPro,
+		setIsPro,
 		apiLimitCount,
 		setApiLimitCount,
 		isOpen,

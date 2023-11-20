@@ -5,12 +5,14 @@ const testimonials = [
 		avatar: 'J',
 		title: 'Software Engineer',
 		description: "This is the best application I've ever used!",
+		src: '/logo1.svg',
 	},
 	{
 		name: 'Antonio',
 		avatar: 'A',
 		title: 'Designer',
 		description: 'I use this daily for generating new photos!',
+		src: '/logo2.svg',
 	},
 	{
 		name: 'Mark',
@@ -18,6 +20,7 @@ const testimonials = [
 		title: 'CEO',
 		description:
 			'This app has changed my life, cannot imagine working without it!',
+		src: '/logo3.svg',
 	},
 	{
 		name: 'Mary',
@@ -25,6 +28,7 @@ const testimonials = [
 		title: 'CFO',
 		description:
 			'The best in class, definitely worth the premium subscription!',
+		src: '/logo4.svg',
 	},
 ]
 </script>
@@ -40,7 +44,7 @@ const testimonials = [
 			<UiCard
 				v-for="item in testimonials"
 				:key="item.description"
-				class="bg-[#192339] border-none text-white"
+				class="bg-white border-none p-4 text-[#192339]"
 			>
 				<UiCardHeader>
 					<UiCardTitle class="flex items-center gap-x-2">
@@ -49,10 +53,18 @@ const testimonials = [
 							<p class="text-zinc-400 text-sm">{{ item.title }}</p>
 						</div>
 					</UiCardTitle>
-					<UiCardContent class="pt-4 px-0">
-						{{ item.description }}
-					</UiCardContent>
 				</UiCardHeader>
+				<UiCardContent class="pt-4 px-0">
+					<p>{{ item.description }}</p>
+
+					<NuxtImg
+						class="max-h-12 w-full pt-4 object-contain self-end stroke-white"
+						:src="item.src"
+						alt="Transistor"
+						width="158"
+						height="48"
+					/>
+				</UiCardContent>
 			</UiCard>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 import { incrementApiLimit, checkApiLimit } from '@/lib/useApiLimit'
-// import { checkSubscription } from '@/lib/useSubscription'
+import { checkSubscription } from '@/lib/useSubscription'
 
 const { configuration, openai } = useOpenAI()
 
@@ -17,11 +17,9 @@ export default defineEventHandler(async (event) => {
 		errorHandler(400, 'Messages are required')
 
 	const freeTrial = await checkApiLimit(userId)
+	const isPro = await checkSubscription(userId)
 
-	// const isPro = await checkSubscription(userId)
-
-	// if (!freeTrial && !isPro)
-	if (!freeTrial)
+	if (!freeTrial && !isPro)
 		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
 	const response = await openai.createChatCompletion({
@@ -32,8 +30,7 @@ export default defineEventHandler(async (event) => {
 	})
 
 	if (response?.data) {
-		// if (!isPro)
-		await incrementApiLimit(userId)
+		if (!isPro) await incrementApiLimit(userId)
 
 		return response.data.choices[0].message
 	}

@@ -15,18 +15,16 @@ export default defineEventHandler(async (event) => {
 	if (!prompt) errorHandler(400, 'Prompt are required')
 
 	const freeTrial = await checkApiLimit(userId)
-	// const isPro = await checkSubscription(userId)
+	const isPro = await checkSubscription(userId)
 
-	// if (!freeTrial && !isPro)
-	if (!freeTrial)
+	if (!freeTrial && !isPro)
 		errorHandler(403, 'Free trial has expired. Please upgrade to pro.')
 
 	const response = await replicate.run(videoAnotherjesse, {
 		input: { prompt },
 	})
 	if (response) {
-		// if (!isPro)
-		await incrementApiLimit(userId)
+		if (!isPro) await incrementApiLimit(userId)
 
 		return response
 	}

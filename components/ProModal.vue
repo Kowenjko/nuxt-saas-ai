@@ -7,26 +7,21 @@ import { useUser } from 'vue-clerk'
 const isLoading = ref(false)
 
 const store = useStore()
-
 const { user } = useUser()
+const { $toast } = useNuxtApp()
 
 const manageSubscription = async () => {
 	isLoading.value = true
 
 	const { data, error } = await useFetch('/api/stripe', {
 		method: 'POST',
-		body: {
-			user: user.value,
-		},
+		body: { user: user.value },
 	})
 
-	if (error.value) {
-		console.log(error.value.statusMessage)
-	}
+	if (error.value) $toast.error(error.value.statusMessage as string)
 
-	if (data.value) {
-		window.location.href = data.value.url
-	}
+	if (data.value) window.location.href = data.value.url
+
 	isLoading.value = false
 }
 </script>

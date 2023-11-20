@@ -3,9 +3,7 @@ import prismadb from '@/lib/prismadb'
 const DAY_IN_MS = 86_400_000
 
 export const checkSubscription = async (userId) => {
-	if (!userId) {
-		return false
-	}
+	if (!userId) return false
 
 	const userSubscription = await prismadb.userSubscription.findUnique({
 		where: {
@@ -19,9 +17,7 @@ export const checkSubscription = async (userId) => {
 		},
 	})
 
-	if (!userSubscription) {
-		return false
-	}
+	if (!userSubscription) return false
 
 	const isValid =
 		userSubscription.stripePriceId &&

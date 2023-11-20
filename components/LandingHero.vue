@@ -3,7 +3,7 @@ import { useUser } from 'vue-clerk'
 
 const { isSignedIn } = useUser()
 
-const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-up'))
+const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-in'))
 </script>
 <template>
 	<div class="text-white font-bold py-36 text-center space-y-5">
@@ -13,23 +13,11 @@ const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-up'))
 			<h1>The Best AI Tool for</h1>
 			<div
 				class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
-			>
-				<!-- <TypewriterComponent
-            options={{
-              strings: [
-                "Chatbot.",
-                "Photo Generation.",
-                "Blog Writing.",
-                "Mail Writing."
-              ],
-              autoStart: true,
-              loop: true,
-            }}
-          /> -->
-			</div>
+			></div>
 		</div>
 		<div class="text-sm md:text-xl font-light text-zinc-400">
-			Create content using AI 10x faster.
+			Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem
+			cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.
 		</div>
 		<div>
 			<NuxtLink :to="isSign">
@@ -46,5 +34,3 @@ const isSign = computed(() => (isSignedIn.value ? '/dashboard' : '/sign-up'))
 		</div>
 	</div>
 </template>
-
-<style scoped></style>

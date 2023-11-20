@@ -6,26 +6,22 @@ const isLoading = ref(false)
 
 const store = useStore()
 const { user } = useUser()
-
-console.log(user.value)
+const { $toast } = useNuxtApp()
 
 const manageSubscription = async () => {
 	isLoading.value = true
 
 	const { data, error } = await useFetch('/api/stripe', {
 		method: 'POST',
-		body: {
-			user: user.value,
-		},
+		body: { user: user.value },
 	})
 
 	if (error.value) {
-		console.log(error.value.statusMessage)
+		$toast.error(error.value.statusMessage as string)
 	}
 
-	if (data.value) {
-		window.location.href = data.value.url
-	}
+	if (data.value) window.location.href = data.value.url
+
 	isLoading.value = false
 }
 </script>
@@ -41,5 +37,3 @@ const manageSubscription = async () => {
 		<Zap v-if="store.isPro" class="w-4 h-4 ml-2 fill-white" />
 	</UiButton>
 </template>
-
-<style scoped></style>

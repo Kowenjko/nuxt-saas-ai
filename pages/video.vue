@@ -25,14 +25,13 @@ const onSubmit = async () => {
 
 	if (error.value) {
 		$toast.error(error.value.statusMessage as string)
-		if (error.value.statusCode === 403) {
-			store.onOpen()
-		}
+		if (error.value.statusCode === 403) store.onOpen()
 	}
 
 	if (data.value) {
 		video.value = data.value[0]
 		store.setApiLimitCount(await useGetLimit())
+		store.setIsPro(await useGetStatus())
 	}
 	isLoading.value = false
 	form.prompt = ''

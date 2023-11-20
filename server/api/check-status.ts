@@ -1,11 +1,11 @@
-import { getApiLimitCount } from '@/lib/useApiLimit'
+import { checkSubscription } from '@/lib/useSubscription'
 
 export default defineEventHandler(async (event) => {
 	const { userId } = event.context.auth
 
 	if (!userId) errorHandler(401, 'Unauthorized')
 
-	const apiLimitCount = await getApiLimitCount(userId as string)
+	const isPro = await checkSubscription(userId as string)
 
-	return { apiLimitCount }
+	return { isPro }
 })
