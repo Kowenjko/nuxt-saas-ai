@@ -1,28 +1,32 @@
 <script setup lang="ts">
+import { useAuth } from 'vue-clerk'
+
 import { MAX_FREE_COUNTS } from '@/constants'
 import { Zap } from 'lucide-vue-next'
 
-interface Props {
-	apiLimitCount: number
-	isPro: boolean
-}
+const isPro = false
+const isMounted = ref(false)
+const store = useStore()
+const { userId } = useAuth()
 
-const props = withDefaults(defineProps<Props>(), {
-	apiLimitCount: 0,
-	isPro: false,
+const progress = computed(() => (store.apiLimitCount / MAX_FREE_COUNTS) * 100)
+
+onMounted(async () => {
+	if (userId.value) store.setApiLimitCount(await useGetLimit())
+	isMounted.value = true
 })
 
-const progress = computed(() => (props.apiLimitCount / MAX_FREE_COUNTS) * 100)
-
-const store = useStore()
+watch(userId, async () => store.setApiLimitCount(await useGetLimit()))
 </script>
 
 <template>
-	<div class="px-3">
+	<div v-if="isMounted" class="px-3">
 		<UiCard class="bg-white/10 border-0">
 			<UiCardContent class="py-6">
 				<div class="text-center text-sm text-white mb-4 space-y-2">
-					<p>{{ apiLimitCount }} / {{ MAX_FREE_COUNTS }} Free Generations</p>
+					<p>
+						{{ store.apiLimitCount }} / {{ MAX_FREE_COUNTS }} Free Generations
+					</p>
 					<UiProgress class="h-3" :model-value="progress" />
 				</div>
 				<UiButton @click="store.onOpen()" variant="premium" class="w-full">

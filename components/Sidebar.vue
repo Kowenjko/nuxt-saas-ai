@@ -10,16 +10,6 @@ import {
 	VideoIcon,
 } from 'lucide-vue-next'
 
-interface Props {
-	apiLimitCount: number
-	isPro: boolean
-}
-
-withDefaults(defineProps<Props>(), {
-	apiLimitCount: 0,
-	isPro: false,
-})
-
 const routes = [
 	{
 		label: 'Dashboard',
@@ -97,7 +87,7 @@ const routes = [
 				</nuxt-link>
 			</div>
 		</div>
-		<FreeCounter :api-limit-count="apiLimitCount" :is-pro="isPro" />
+		<FreeCounter />
 	</div>
 </template>
 
