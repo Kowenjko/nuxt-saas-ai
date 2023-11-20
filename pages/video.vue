@@ -11,6 +11,7 @@ const video = ref<string | null>(null)
 const form = reactive<FormI>({ prompt: '' })
 
 const store = useStore()
+const { $toast } = useNuxtApp()
 
 const onSubmit = async () => {
 	isLoading.value = true
@@ -23,7 +24,7 @@ const onSubmit = async () => {
 	})
 
 	if (error.value) {
-		console.log(error.value.statusMessage)
+		$toast.error(error.value.statusMessage as string)
 		if (error.value.statusCode === 403) {
 			store.onOpen()
 		}
@@ -55,6 +56,7 @@ definePageMeta({
 			class="rounded-lg border w-full p-4 px-3 md:px-6 focus-within:shadow-sm grid grid-cols-12 gap-2"
 		>
 			<TextField
+				class="col-span-12 lg:col-span-10"
 				name="prompt"
 				v-model:prompt="form.prompt"
 				placeholder="An astronaut riding a horse"

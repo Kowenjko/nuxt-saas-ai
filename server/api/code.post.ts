@@ -13,8 +13,7 @@ export default defineEventHandler(async (event) => {
 	if (!userId) errorHandler(401, 'Unauthorized')
 	if (!configuration.apiKey) errorHandler(500, 'OpenAI API Key not configured.')
 
-	if (!messages && messages.length > 0)
-		errorHandler(400, 'Messages are required')
+	if (!messages) errorHandler(400, 'Messages are required')
 
 	const freeTrial = await checkApiLimit(userId)
 	// const isPro = await checkSubscription(userId)

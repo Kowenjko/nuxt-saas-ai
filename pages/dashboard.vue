@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { tools } from '@/constants'
-import { cn } from '@/lib/utils'
 import { ArrowRight } from 'lucide-vue-next'
-
-const store = useStore()
 
 definePageMeta({
 	middleware: ['auth'],
@@ -23,6 +20,7 @@ definePageMeta({
 				Chat with the smartest AI - Experience the power of AI
 			</p>
 		</div>
+
 		<div class="px-4 md:px-20 lg:px-32 space-y-4">
 			<UiCard
 				v-for="tool in tools"
@@ -31,13 +29,14 @@ definePageMeta({
 				class="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition-all cursor-pointer"
 			>
 				<div class="flex items-center gap-x-4">
-					<div :class="cn('p-2 w-fit rounded-md', tool.bgColor)">
-						<component :is="tool.icon" :class="cn('w-8 h-8', tool.color)" />
+					<div :class="['p-2 w-fit rounded-md', tool.bgColor]">
+						<component :is="tool.icon" :class="['w-8 h-8', tool.color]" />
 					</div>
 					<div class="font-semibold">{{ tool.label }}</div>
 				</div>
 				<ArrowRight class="w-5 h-5" />
 			</UiCard>
 		</div>
+		<UiToast />
 	</div>
 </template>

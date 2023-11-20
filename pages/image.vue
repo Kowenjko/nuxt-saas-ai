@@ -10,11 +10,12 @@ interface FormI {
 	resolution: string
 }
 
-const store = useStore()
-
 const isLoading = ref<boolean>(false)
 const photos = ref<string[]>([])
 const form = reactive<FormI>({ prompt: '', amount: '1', resolution: '256x256' })
+
+const store = useStore()
+const { $toast } = useNuxtApp()
 
 const onSubmit = async () => {
 	isLoading.value = true
@@ -25,7 +26,7 @@ const onSubmit = async () => {
 	})
 
 	if (error.value) {
-		console.log(error.value.statusMessage)
+		$toast.error(error.value.statusMessage as string)
 		if (error.value.statusCode === 403) {
 			store.onOpen()
 		}
@@ -60,11 +61,11 @@ definePageMeta({
 			@submit="onSubmit"
 		>
 			<TextField
+				class="col-span-12 lg:col-span-6"
 				name="prompt"
 				v-model:prompt="form.prompt"
 				placeholder="A picture of a horse in Swiss alps"
 				:isLoading="isLoading"
-				col-span="6"
 			/>
 
 			<SelectField

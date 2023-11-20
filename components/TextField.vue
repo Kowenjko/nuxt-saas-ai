@@ -29,16 +29,18 @@ const value = computed({
 </script>
 
 <template>
-	<FormField :name="name">
-		<UiFormItem :class="`col-span-12 lg:col-span-${colSpan}`">
-			<UiFormControl class="m-0 p-0">
-				<UiInput
-					class="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-					:placeholder="placeholder"
-					v-model="value"
-					:disabled="isLoading"
-				/>
-			</UiFormControl>
-		</UiFormItem>
-	</FormField>
+	<div>
+		<FormField :name="name">
+			<UiFormItem>
+				<UiFormControl class="m-0 p-0">
+					<UiInput
+						class="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+						:placeholder="placeholder"
+						v-model="value"
+						:disabled="isLoading"
+					/>
+				</UiFormControl>
+			</UiFormItem>
+		</FormField>
+	</div>
 </template>

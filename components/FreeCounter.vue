@@ -4,7 +4,6 @@ import { useAuth } from 'vue-clerk'
 import { MAX_FREE_COUNTS } from '@/constants'
 import { Zap } from 'lucide-vue-next'
 
-const isPro = false
 const isMounted = ref(false)
 const store = useStore()
 const { userId } = useAuth()
