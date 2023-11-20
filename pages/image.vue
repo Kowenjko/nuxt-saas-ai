@@ -34,7 +34,6 @@ const onSubmit = async () => {
 		const urls = data.value.map((image: { url: string }) => image.url)
 		store.setApiLimitCount(await useGetLimit())
 		store.setIsPro(await useGetStatus())
-		console.log(urls)
 
 		photos.value = urls
 	}
@@ -114,5 +113,3 @@ definePageMeta({
 		</div>
 	</div>
 </template>
-
-<style scoped></style>

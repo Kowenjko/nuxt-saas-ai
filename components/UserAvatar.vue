@@ -12,5 +12,3 @@ const { user } = useUser()
 		</UiAvatarFallback>
 	</UiAvatar>
 </template>
-
-<style scoped></style>

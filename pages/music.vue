@@ -80,5 +80,3 @@ definePageMeta({
 		</audio>
 	</div>
 </template>
-
-<style scoped></style>

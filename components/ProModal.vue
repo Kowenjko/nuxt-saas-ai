@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { tools } from '@/constants'
-import { cn } from '@/lib/utils'
 import { Check, Zap } from 'lucide-vue-next'
 import { useUser } from 'vue-clerk'
 
@@ -19,7 +18,6 @@ const manageSubscription = async () => {
 	})
 
 	if (error.value) $toast.error(error.value.statusMessage as string)
-
 	if (data.value) window.location.href = data.value.url
 
 	isLoading.value = false
@@ -47,8 +45,8 @@ const manageSubscription = async () => {
 						class="p-3 border-black/5 flex items-center justify-between"
 					>
 						<div class="flex items-center gap-x-4">
-							<div :class="cn('p-2 w-fit rounded-md', tool.bgColor)">
-								<component :is="tool.icon" :class="cn('w-6 h-6', tool.color)" />
+							<div :class="['p-2 w-fit rounded-md', tool.bgColor]">
+								<component :is="tool.icon" :class="['w-6 h-6', tool.color]" />
 							</div>
 							<div class="font-semibold text-sm">
 								{{ tool.label }}

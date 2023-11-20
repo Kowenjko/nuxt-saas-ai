@@ -16,6 +16,4 @@ export default defineNuxtRouteMiddleware(() => {
 	if (process.client && clerk.loaded && clerk.user?.id) {
 		return navigateTo('/dashboard')
 	}
-
-	// return navigateTo('/')
 })

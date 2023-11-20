@@ -16,10 +16,7 @@ const manageSubscription = async () => {
 		body: { user: user.value },
 	})
 
-	if (error.value) {
-		$toast.error(error.value.statusMessage as string)
-	}
-
+	if (error.value) $toast.error(error.value.statusMessage as string)
 	if (data.value) window.location.href = data.value.url
 
 	isLoading.value = false

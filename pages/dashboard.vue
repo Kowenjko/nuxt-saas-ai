@@ -37,6 +37,5 @@ definePageMeta({
 				<ArrowRight class="w-5 h-5" />
 			</UiCard>
 		</div>
-		<UiToast />
 	</div>
 </template>

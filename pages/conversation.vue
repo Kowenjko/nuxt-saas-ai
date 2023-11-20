@@ -10,12 +10,12 @@ interface MessageI {
 	content: string
 }
 
-const store = useStore()
-const { $toast } = useNuxtApp()
-
 const isLoading = ref<boolean>(false)
 const messages = ref<MessageI[]>([])
 const form = reactive<FormI>({ prompt: '' })
+
+const store = useStore()
+const { $toast } = useNuxtApp()
 
 const onSubmit = async () => {
 	isLoading.value = true

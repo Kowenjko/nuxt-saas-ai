@@ -15,7 +15,6 @@ const { $toast } = useNuxtApp()
 
 const onSubmit = async () => {
 	isLoading.value = true
-
 	video.value = null
 
 	const { data, error } = await useFetch('/api/video', {
@@ -84,5 +83,3 @@ definePageMeta({
 		</video>
 	</div>
 </template>
-
-<style scoped></style>

@@ -26,5 +26,3 @@ definePageMeta({
 		<SubscriptionButton />
 	</div>
 </template>
-
-<style scoped></style>
